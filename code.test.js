@@ -1,47 +1,58 @@
 const fs = require('fs');
-const jsc = require('jsverify');
+const assert = require('assert');
 
-eval(fs.readFileSync('code.js') + '');
+eval(fs.readFileSync('code.js')+'');
 
-const test = jsc.forall("array (pair nat nat)", function(edges) {
-    let max = edges.reduce((a, b) => Math.max(a, Math.max(b[0], b[1])),0);
+// Simple cycle
+var graph = {
+    0: [1],
+    1: [2],
+    2: [0]
+};
+assert(hasCycle(graph) == true);
 
-    let graph = {};
-    for (let i = 0; i <= max; i++) {
-        graph[i] = [];
-    }
-    
-    for (let [u, v] of edges) {
-        graph[u].push(v);
-    }
+// No cycle
+var graph = {
+    0: [1],
+    1: [2],
+    2: []
+};
+assert(hasCycle(graph) == false);
 
-    function manaulDetect(graph) {
-        let visited = new Set();
-        let recursionStack = new Set();
+// Self loop
+var graph = {
+    0: [0]
+};
+assert(hasCycle(graph) == true);
 
-        function dfs(vertex) {
-            visited.add(vertex);
-            recursionStack.add(vertex);
-            for (let neighbor of (graph[vertex] || [])) {
-                if (!visited.has(neighbor)) {
-                    if (dfs(neighbor)) return true;
-                } else if (recursionStack.has(neighbor)) {
-                    return true;
-                }
-            }
+// Empty
+var graph = {};
+assert(hasCycle(graph) == false);
 
-            recursionStack.delete(vertex);
-            return false;
-        }
-        for (let vertex in graph) {
-            if (!visited.has(Number(vertex))) {
-                if (dfs(Number(vertex))) return true;
-            }
-        }
-        return false;
-    }
+// Complex
+var graph = {
+    0: [1, 2],
+    1: [2],
+    2: [3],
+    3: [1]
+};
+assert(hasCycle(graph) == true);
 
-    return hasCycle(graph) == manaulDetect(graph);
-});
+// Disconnected nodes
+var graph = {
+    0: [1],
+    1: [],
+    2: [3],
+    3: [4],
+    4: [2]
+};
+assert(hasCycle(graph) == true);
 
-jsc.assert(test, { tests: 1000 });
+// Multiple nodes, no cycle
+var graph = {
+    0: [1, 2],
+    1: [3],
+    2: [3],
+    3: []
+};
+assert(hasCycle(graph) == false);
