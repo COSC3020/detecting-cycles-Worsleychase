@@ -15,3 +15,15 @@ the function and run automatically when you commit through a GitHub action.
 
 What is the worst-case big $\Theta$ complexity of your implementation? Add your
 answer, including your reasoning, to this markdown file.
+
+# Solution
+
+I used depth-first-search (DFS), which visits every vertex and edge at least once. For each vertex it performs a set operation O(1). This means worst case our complexity is O(n+m), where n is # of verticies and m is # of edges, because we would have to travel every edge to get to every vertex (linear graph). Therefore our worst-case is:
+
+$$\Theta (n+m)$$
+
+# Disclaimer
+
+I used [this](https://www.freecodecamp.org/news/var-let-and-const-whats-the-difference/) to start using the correct keywords in JavaScript, had problems using let and var in the cycle detection.
+
+I certify that I have listed all sources used to complete this exercise, including the use of any Large Language Models. All of the work is my own, except where stated otherwise. I am aware that plagiarism carries severe penalties and that if plagiarism is suspected, charges may be filed against me without prior notice.
